@@ -1,0 +1,4 @@
+-- Intentionally empty of INSERT statements: this project contains no production,
+-- private research, member, or demonstration records. Provision identities and
+-- organizational structure through an authorized application workflow only.
+-- Keep any future demo fixtures clearly labeled and free of scientific guidance.

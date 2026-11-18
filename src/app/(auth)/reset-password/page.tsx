@@ -1,0 +1,16 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { ArrowLeft, KeyRound } from "lucide-react";
+import { Brand } from "@/components/brand";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/primitives";
+import { completePasswordResetAction } from "@/lib/auth/actions";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+export default async function ResetPasswordPage({ searchParams }: { searchParams: Promise<{ success?: string; error?: string; reason?: string }> }) {
+  const params = await searchParams;
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+  if (!user && params.success !== "1") redirect("/login?error=recovery");
+  return <main className="flex min-h-screen flex-col bg-paper px-5 py-8 sm:px-10"><div className="mx-auto w-full max-w-5xl"><Brand href="/login" /></div><section className="mx-auto my-auto w-full max-w-[430px] py-14"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-pine-50 text-pine-700"><KeyRound size={21} /></span><p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.2em] text-pine-700">Secure account recovery</p><h1 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-ink">Choose a new password</h1><p className="mt-2 text-sm leading-6 text-muted">Use at least 12 characters. Your recovery session is checked again when the password is saved.</p><Card className="mt-7 p-5 sm:p-6">{params.success === "1" ? <div role="status" className="rounded-xl border border-pine-100 bg-pine-50 p-4 text-sm leading-6 text-pine-800">Your password has been updated. You can sign in with the new password.</div> : <form action={completePasswordResetAction} className="space-y-4"><label className="block space-y-2"><span className="text-xs font-medium text-ink">New password</span><input name="password" type="password" required minLength={12} maxLength={256} autoComplete="new-password" className="h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm focus:border-pine-500 focus:outline-none focus:ring-2 focus:ring-pine-100" /></label><label className="block space-y-2"><span className="text-xs font-medium text-ink">Confirm new password</span><input name="confirmation" type="password" required minLength={12} maxLength={256} autoComplete="new-password" className="h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm focus:border-pine-500 focus:outline-none focus:ring-2 focus:ring-pine-100" /></label>{(params.error || params.reason) && <p role="status" className="rounded-lg bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-700">{params.reason === "setup" ? "Password recovery is not configured yet." : params.error === "invalid" ? "Passwords must match and contain at least 12 characters." : "The password could not be updated. Request a fresh recovery link and try again."}</p>}<Button type="submit" className="w-full">Update password</Button></form>}</Card><Link href="/login" className="mt-5 inline-flex items-center gap-2 text-xs font-medium text-muted hover:text-pine-700"><ArrowLeft size={14} />Back to sign in</Link></section><p className="mx-auto w-full max-w-5xl text-[10px] text-muted">Forevit Dairy · Private workspace</p></main>;
+}

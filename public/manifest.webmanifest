@@ -1,0 +1,14 @@
+{
+  "id": "/",
+  "name": "Forevit Dairy Research Workspace",
+  "short_name": "Forevit",
+  "description": "A traceable research workspace for Forevit Dairy.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f4ef",
+  "theme_color": "#145447",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
